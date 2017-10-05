@@ -22,16 +22,34 @@ def solarIrradiance(day, theta):
     f = s_0 * sun_earth_ratio*np.cos(theta)
     return f
 
-valsX = []
-valsY = []
+febX = []
+febY = []
+
+mayX = []
+mayY = []
+
+augX = []
+augY = []
+
+novX = []
+novY = []
 
 for i in range(0,100):
-    valsX.append(i/100.0)
-    valsY.append(solarIrradiance(feb,(i/100.0*np.pi)))
+    febX.append(i/100.0)
+    febY.append(solarIrradiance(feb,(i/100.0*2*np.pi)))
+    
+    mayX.append(i/100.0)
+    mayY.append(solarIrradiance(may,(i/100.0*2*np.pi)))
+    
+    augX.append(i/100.0)
+    augY.append(solarIrradiance(aug,(i/100.0*2*np.pi)))
+    
+    novX.append(i/100.0)
+    novY.append(solarIrradiance(nov,(i/100.0*2*np.pi)))
 
-pylab.plot(valsX,valsY,'r:')
-
-pylab.xlim(-0.25,1.25)
+pylab.plot(febX,febY,mayX,mayY,augX,augY,novX,novY,'r')
+pylab.legend(["Feb","may","Aug","Nov"])
+pylab.xlim(-0.01,1)
 pylab.ylim(-2000,2000)
 pylab.show()
 
