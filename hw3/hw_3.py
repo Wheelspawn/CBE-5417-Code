@@ -73,20 +73,21 @@ CS = pylab.plt.contour( Z, 20, colors='black') # plot contour
 # micro = 10^-6
 # nano = 10^-9
 
-x = []
-sun = []
-earth = []
-sunWienDisp = []
-
-for i in range(0, 10):
-    x.append(i)
-    sun.append(planckFunction(np.float64(i), 6500.0)) # earth frequency (0 micrometer to 500 micrometer) and temp
-    earth.append(planckFunction(np.float64(i),300.0))
+def run():
+    x = []
+    sun = []
+    earth = []
+    sunWienDisp = []
     
-pylab.plot(x,sun,linewidth='2.5')
-pylab.plot(x,earth,linewidth='2.5')
-pylab.xlabel('Wavelength (m)')
-pylab.ylabel('Spectral radiance (W m$^{−2}$ µm$^{−1}$ sr$^{−1}$)')
-pylab.xscale('log')
-pylab.yscale('log')
-pylab.show()
+    for i in range(0, 10):
+        x.append(i)
+        sun.append(planckFunction(np.float64(i), 6500.0)) # earth frequency (0 micrometer to 500 micrometer) and temp
+        earth.append(planckFunction(np.float64(i),300.0))
+        
+    pylab.plot(x,sun,linewidth='2.5')
+    pylab.plot(x,earth,linewidth='2.5')
+    pylab.xlabel('Wavelength (m)')
+    pylab.ylabel('Spectral radiance (W m$^{−2}$ µm$^{−1}$ sr$^{−1}$)')
+    pylab.xscale('log')
+    pylab.yscale('log')
+    pylab.show()
