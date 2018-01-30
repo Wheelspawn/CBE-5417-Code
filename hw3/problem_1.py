@@ -35,9 +35,9 @@ def hourlySolarIrradiance(latitude, day, hour):
     # returns average solar irradiance on given day and latitude
 def averagedSolarIrradiance(day, latitude):
     avg = 0.0
-    for i in range(48): # hours
-        avg += hourlySolarIrradiance(np.deg2rad(latitude),day,i*0.5)
-    return avg/48.0
+    for i in range(24): # hours
+        avg += hourlySolarIrradiance(np.deg2rad(latitude),day,i)
+    return avg/24.0
 
 def solarDeclinationAngle(day): # calculate the solar declination angle
     return -23.45 * np.cos( np.deg2rad( (360.0/365.0) * (day + 10) ) )
@@ -68,6 +68,7 @@ y = np.linspace(year_begin, year_end, 365) # y-axis
 X, Y = np.meshgrid(x, y) # set up the contour
 Z = np.zeros((np.size(x), np.size(y))) # calculate the z values
 W = np.zeros((np.size(x), np.size(y))) # these will be the dark areas
+P = np.zeros((np.size(x), np.size(y)))
 D = np.zeros(np.size(y)) # declination angle
 
 # calculating the Z and W values
@@ -78,6 +79,7 @@ for i in range(np.size(x)):
             W[i,j] = 1 # matplotlib will plot this as part of the gray region
         else:
             W[i,j] = None # matplotlib won't plot these None values
+        P[i,j] = a
         Z[i,j] = a
 
 # calculate the declination angle
@@ -94,43 +96,27 @@ center = 170
 label_bbox=dict(facecolor='white', edgecolor='none', pad=1.0)
 
 # CF = pylab.plt.contour(Z, 0, colors='black')
+pylab.plt.contourf(P, 30, cmap='plasma') # contourf will be filled
 pylab.plt.contourf(W, 30, colors='gray') # contourf will be filled
 CS = pylab.plt.contour( Z, 25, colors='black') # contour CS will have contour lines
 
 # setting locations for some labels for insolation
-# manuallocations = [(center, 20),(center, 42),(center, 58),
-#                    (center, 75),(center, 95),(center, 160),]
-# pylab.plt.clabel(CS, inline_spacing=-3, fontsize=10, manual=manuallocations) # plot the labels
+manuallocations = [(center, 20),(center, 42),(center, 58),
+                   (center, 75),(center, 95),(center, 160),
+                   (15,55),(15,100),(15,115),(15,130),(15,145),
+                   (350,60),(350,100),(350,115),(350,130),(350,145)]
+pylab.plt.clabel(CS, inline_spacing=-3, fontsize=10, manual=manuallocations) # plot the labels
 
 pylab.title("Daily average insolation [W m$^{-2}$]") # title
 
-pylab.text(160-3,170,'24 hr light',backgroundcolor='white',bbox=label_bbox) # text for 24hr light/dark
+pylab.text(160-3,170,'24 hr light') # text for 24hr light/dark
 pylab.text(160-3,10,'24 hr darkness')
 
 pylab.text(10,170,'24 hr darkness')
 pylab.text(310,170,'24 hr darkness')
 
-pylab.text(10,10,'24 hr light',backgroundcolor='white',bbox=label_bbox)
-pylab.text(310+10,10,'24 hr light',backgroundcolor='white',bbox=label_bbox)
-
-pylab.text(15,55,'500',backgroundcolor='white',bbox=label_bbox)
-pylab.text(15,92,'400',backgroundcolor='white',bbox=label_bbox)
-pylab.text(15,112,'300',backgroundcolor='white',bbox=label_bbox)
-pylab.text(15,126,'200',backgroundcolor='white',bbox=label_bbox)
-pylab.text(15,139,'100',backgroundcolor='white',bbox=label_bbox)
-
-pylab.text(325,55,'500',backgroundcolor='white',bbox=label_bbox)
-pylab.text(340,93,'400',backgroundcolor='white',bbox=label_bbox)
-pylab.text(340,110,'300',backgroundcolor='white',bbox=label_bbox)
-pylab.text(340,125,'200',backgroundcolor='white',bbox=label_bbox)
-pylab.text(340,139,'100',backgroundcolor='white',bbox=label_bbox)
-
-pylab.text(center+1,22,'0',backgroundcolor='white',bbox=label_bbox)
-pylab.text(center-3,41,'100',backgroundcolor='white',bbox=label_bbox)
-pylab.text(center-3,60,'200',backgroundcolor='white',bbox=label_bbox)
-pylab.text(center-3,76,'300',backgroundcolor='white',bbox=label_bbox)
-pylab.text(center-3,97,'400',backgroundcolor='white',bbox=label_bbox)
-pylab.text(center-3,160,'500',backgroundcolor='white',bbox=label_bbox)
+pylab.text(10,10,'24 hr light')
+pylab.text(310+10,10,'24 hr light')
 
 # custom axis tick labels
 new_x_axis = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
